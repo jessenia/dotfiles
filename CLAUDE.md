@@ -119,6 +119,30 @@ separate rewrite, not a pin removal.
   or work-specific identities in tracked files.
 - **Comment style:** section headers as banner comments (`# ===…===`) matching the
   existing `.aliases` / `.zshrc` style.
+- **Helper functions** in `zsh/.aliases` follow two rules from the tool-design
+  principles below: print a **definitive empty state** (say "no matches" / "none"
+  instead of silent output) and return a **non-zero exit code** on no-result/failure.
+  Guard commands that break on empty input (e.g. `docker stop $(docker ps -q)`).
+
+## Tool-design principles (for any future data-returning CLI)
+
+This repo currently has no agent-facing CLI that emits structured data, so most of these
+do not yet apply. If one is ever added here, design it for agent consumption:
+
+1. Token-efficient output (e.g. TOON over JSON, roughly 40% fewer tokens).
+2. Minimal default schemas: 3-4 fields per list item, not 10+.
+3. Truncate large text fields with size hints and an escape hatch to fetch full content.
+4. Pre-compute aggregates (counts, statuses) to avoid follow-up round trips.
+5. Definitive empty states: say "0 results", never ambiguous empty output.
+6. Structured errors and exit codes; idempotent mutations; no interactive prompts.
+7. Ambient context first (opt-in session integration), then an on-demand skill.
+8. Content first: show actual data, not a wall of help text.
+9. Contextual disclosure: append relevant next-step commands after output.
+10. Consistent, concise per-subcommand help for when agents need it.
+
+Already reflected where applicable: definitive empty states + non-interactive exit codes
+in `zsh/.aliases` (#5, #6); ambient global `CLAUDE.md` + on-demand `claude/skills/` (#7);
+`make help` and `install.sh`'s closing next-step hint (#9, #10).
 
 ## How configs map to $HOME
 

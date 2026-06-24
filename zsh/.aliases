@@ -63,11 +63,15 @@ cd "$(dirname "$1")"
 }
 
 ff() {
-find . -iname "*$1*"
+local results; results=$(find . -iname "*$1*")
+[[ -z "$results" ]] && { echo "no matches for '$1'"; return 1; }
+echo "$results"
 }
 
 fdc() {
-find . -type d -iname "*$1*"
+local results; results=$(find . -type d -iname "*$1*")
+[[ -z "$results" ]] && { echo "no matches for '$1'"; return 1; }
+echo "$results"
 }
 
 bigfiles() {
@@ -235,7 +239,9 @@ cd "$root"
 }
 
 gcleanbranches() {
-git branch --merged | egrep -v "(^*|main|master|develop)" | xargs -r git branch -d
+local branches; branches=$(git branch --merged | sed 's/^[*+ ]*//' | grep -vE '^(main|master|develop)$')
+[[ -z "$branches" ]] && { echo "No merged branches to clean."; return 0; }
+echo "$branches" | xargs -n1 git branch -d
 }
 
 # ============================================================
@@ -296,15 +302,21 @@ docker exec -it "$1" bash
 }
 
 dstopall() {
-docker stop $(docker ps -q)
+local ids; ids=$(docker ps -q)
+[[ -z "$ids" ]] && { echo "No running containers."; return 0; }
+docker stop $ids
 }
 
 drmall() {
-docker rm -f $(docker ps -aq)
+local ids; ids=$(docker ps -aq)
+[[ -z "$ids" ]] && { echo "No containers."; return 0; }
+docker rm -f $ids
 }
 
 drmimages() {
-docker rmi -f $(docker images -q)
+local ids; ids=$(docker images -q)
+[[ -z "$ids" ]] && { echo "No images."; return 0; }
+docker rmi -f $ids
 }
 
 # Docker Compose v2
@@ -409,15 +421,15 @@ watch kubectl get pods -A
 }
 
 kubefindpod() {
-kubectl get pods -A | grep -i "$1"
+kubectl get pods -A | grep -i "$1" || { echo "no pods matching '$1'"; return 1; }
 }
 
 kubefindsvc() {
-kubectl get svc -A | grep -i "$1"
+kubectl get svc -A | grep -i "$1" || { echo "no services matching '$1'"; return 1; }
 }
 
 kubefinddeploy() {
-kubectl get deploy -A | grep -i "$1"
+kubectl get deploy -A | grep -i "$1" || { echo "no deployments matching '$1'"; return 1; }
 }
 
 # ============================================================
