@@ -31,10 +31,16 @@ link "$DOTFILES_DIR/config/nvim"            "$HOME/.config/nvim"
 link "$DOTFILES_DIR/config/wezterm"         "$HOME/.config/wezterm"
 link "$DOTFILES_DIR/config/tmux/.tmux.conf" "$HOME/.tmux.conf"
 
-# Cross-agent instructions: Codex (and other agents) read AGENTS.md. Point it at
-# Claude's global ~/.claude/CLAUDE.md so every agent shares one set of instructions.
-mkdir -p "$HOME/.claude"
-[[ -e "$HOME/.claude/CLAUDE.md" ]] || touch "$HOME/.claude/CLAUDE.md"
+# Global Claude instructions + skills.
+# NOTE: claude/CLAUDE.md here is the GLOBAL file, distinct from the repo-root CLAUDE.md
+# (which is project-only and is NOT symlinked anywhere).
+# Codex and other agents read ~/AGENTS.md, which points at the same global file.
+mkdir -p "$HOME/.claude/skills"
+link "$DOTFILES_DIR/claude/CLAUDE.md"       "$HOME/.claude/CLAUDE.md"
 link "$HOME/.claude/CLAUDE.md"              "$HOME/AGENTS.md"
+for skill in "$DOTFILES_DIR"/claude/skills/*/; do
+  [[ -d "$skill" ]] || continue
+  link "${skill%/}" "$HOME/.claude/skills/$(basename "$skill")"
+done
 
 echo "==> Symlinks done"

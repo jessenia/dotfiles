@@ -43,13 +43,24 @@ zsh/
 git/.gitconfig              # Git identity, delta pager, aliases → ~/.gitconfig
 ssh/config.example          # SSH config template (copy to ~/.ssh/config; real one is gitignored)
 macos/defaults.sh           # macOS `defaults write` tweaks (run by install.sh)
+claude/                     # GLOBAL AI-assistant config (NOT this project file — see note)
+├── CLAUDE.md               #   Global instructions → ~/.claude/CLAUDE.md (and ~/AGENTS.md)
+└── skills/                 #   Claude skills → ~/.claude/skills/* (debugging, infra, …)
 .github/workflows/ci.yml    # CI: shellcheck (bash only) + Brewfile + Lua syntax
 .gitignore                  # Ignores backups, macOS junk, and secrets (see below)
 .editorconfig               # UTF-8 / LF / 2-space defaults
 LICENSE                     # MIT
 README.md                   # Project overview + usage guides (tmux/WezTerm/Neovim)
-CLAUDE.md                   # This file — conventions + guidance
+CLAUDE.md                   # This file — conventions for working ON the dotfiles repo
 ```
+
+### Two different CLAUDE.md files — do not confuse them
+- **`CLAUDE.md`** (repo root, this file) = **project** guidance, scoped to the dotfiles
+  repo. It is NOT symlinked anywhere.
+- **`claude/CLAUDE.md`** = the user's **global** instructions for every project/agent.
+  It is symlinked to `~/.claude/CLAUDE.md` and `~/AGENTS.md`. Skills live in
+  `claude/skills/` (Claude-only; Codex reads the global file but not skills). When the
+  user mentions their "global CLAUDE.md", they mean `claude/CLAUDE.md`, never this file.
 
 ### Cross-tool keybinding contract
 `Ctrl-h/j/k/l` moves between splits/panes seamlessly across nvim + tmux:

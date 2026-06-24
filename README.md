@@ -48,6 +48,9 @@ and sensible macOS defaults.
 ├── git/.gitconfig         # → ~/.gitconfig
 ├── ssh/config.example     # SSH config template (copy to ~/.ssh/config)
 ├── macos/defaults.sh      # macOS `defaults write` tweaks
+├── claude/                # Global AI-assistant config (NOT the repo-root CLAUDE.md)
+│   ├── CLAUDE.md          #   → ~/.claude/CLAUDE.md and ~/AGENTS.md
+│   └── skills/            #   → ~/.claude/skills/* (Claude skills)
 └── scripts/link.sh        # Symlinker (used by install.sh and `make symlinks`)
 ```
 
