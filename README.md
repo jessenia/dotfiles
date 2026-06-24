@@ -14,6 +14,7 @@ and sensible macOS defaults.
 - [tmux guide](#tmux-guide)
 - [WezTerm guide](#wezterm-guide)
 - [Neovim guide](#neovim-guide)
+- [AI tools](#ai-tools)
 - [Notes](#notes)
 - [License](#license)
 
@@ -27,6 +28,7 @@ and sensible macOS defaults.
 | Editor (IDE) | VS Code                                         |
 | Shell        | Zsh + oh-my-zsh + Powerlevel10k                 |
 | Packages     | [Homebrew](https://brew.sh/) (`Brewfile`)       |
+| AI CLIs      | Claude Code, Codex, Pieces                       |
 | Theme        | rose-pine moon (consistent across all three)    |
 
 ## Layout
@@ -219,10 +221,30 @@ installs plugins; run `:Lazy` to manage them and `:Mason` for language servers.
 | `Space gb` / `Space gp` / `Space gr` | Blame line / preview hunk / reset hunk |
 | `gcc` / `gc` (visual) | Toggle comment |
 | `Space y` / `Space p` | Yank / paste via system clipboard |
-| `Space tt` / `Space tc` | Open terminal / Claude terminal |
+| `Space tt` | Open terminal |
+| `Space tc` / `Space tx` / `Space tp` | AI terminal: Claude / Codex / Pieces |
 
 Useful commands: `:Lazy` (plugins), `:Mason` (LSP servers), `:checkhealth` (diagnose
 your setup), `:Telescope keymaps` (search every keybinding).
+
+## AI tools
+
+Three terminal AI CLIs are installed via the `Brewfile` and wired up consistently:
+
+| Tool | Install | Alias prefix | nvim |
+|------|---------|--------------|------|
+| Claude Code | (npm / installer) | `cl*` (`cla`, `clp`, `clc`…) | `Space tc` |
+| Codex | `cask "codex"` | `cx*` (`cx`, `cxe`, `cxl`…) | `Space tx` |
+| Pieces | `pieces-cli` + `pieces-os` | `pi*` (`pi`, `pia`, `pis`…) | `Space tp` |
+
+See the alias groups in [`zsh/.aliases`](./zsh/.aliases). Pieces also needs **PiecesOS**
+running (`cask "pieces-os"`) before its CLI works.
+
+### Shared global instructions
+Global AI-assistant instructions live in [`claude/CLAUDE.md`](./claude/CLAUDE.md) and are
+symlinked to `~/.claude/CLAUDE.md` and `~/AGENTS.md`, so Claude and Codex share one set of
+rules. Claude-only **skills** (loaded on demand) live in `claude/skills/`. This is
+separate from the repo-root `CLAUDE.md`, which only guides work inside this repo.
 
 ## Notes
 
@@ -230,7 +252,8 @@ your setup), `:Telescope keymaps` (search every keybinding).
 - **Browsers:** Chrome + Firefox. **VPN:** Mozilla VPN + Firefox Relay.
 - Machine-local secrets go in `~/.local.zsh` and `~/.aws_helpers.zsh` (gitignored,
   sourced by `.zshrc` if present).
-- See [CLAUDE.md](./CLAUDE.md) for conventions and guidance when modifying this repo.
+- See [CLAUDE.md](./CLAUDE.md) for conventions when modifying **this repo** (distinct
+  from the global [`claude/CLAUDE.md`](./claude/CLAUDE.md) described above).
 
 ## License
 

@@ -5,16 +5,16 @@ description: Use when editing Terraform, Kubernetes, AWS, Docker, or CI/CD confi
 
 # Infrastructure changes
 
+The global safety guardrails (no destructive commands; confirm before changing state
+backends, provider versions, cluster contexts, namespaces, or deploy targets) already
+apply. This skill adds the domain workflow on top of them.
+
 Inspect current conventions before editing. Prefer idempotent changes.
-
 Do not touch production-facing configuration casually.
-Do not change state backends, provider versions, cluster contexts, namespaces, or deployment targets without explicit confirmation.
 
-Terraform: prefer `terraform fmt`, `terraform validate`, and `terraform plan` when safe and configured.
-Review the plan before suggesting apply.
+Terraform: run `terraform fmt`, `terraform validate`, and `terraform plan` when safe and
+configured. Review the plan before suggesting apply.
 
-Kubernetes: show namespace and context assumptions before applying anything.
+Kubernetes: state the target namespace and context assumptions before applying anything.
 
 IAM and RBAC: prefer least privilege. Avoid broad IAM wildcards unless justified.
-
-Never run `terraform destroy`, `kubectl delete`, or destructive cloud commands unless explicitly requested.

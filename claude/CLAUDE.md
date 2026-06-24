@@ -15,6 +15,8 @@ Prefer durable engineering quality over quick but fragile choices.
 - Investigate before changing; prefer evidence from the repo over assumptions (use `rg`, `fd`, `jq`, `yq`, `git diff`, existing project commands).
 - Make the smallest useful change. Keep changes small, incremental, reviewable, and deployable. Do not silently broaden scope.
 - For non-trivial tasks: inspect state, state the approach briefly, make the change, validate with targeted commands, then summarize what changed, why, files touched, validation, and remaining risk.
+- Spend tokens only when they improve the result. Extra context, effort, or skill invocation must make the output better; never use more tokens for the same or worse result. Skip a skill when it would not help.
+- Skills must be proven and rigorous. Use a skill only when it demonstrably improves the result; if a skill is not proven to help the agent, say so and recommend against using it.
 - Do not hide uncertainty. Do not claim something works unless verified; otherwise label it unverified.
 
 ## Communication
