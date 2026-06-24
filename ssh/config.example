@@ -1,0 +1,27 @@
+# SSH config template.
+#
+# Copy to ~/.ssh/config and customize. Do NOT commit your real ~/.ssh/config
+# (it is gitignored) — it may contain private host names or identities.
+#
+#   cp ssh/config.example ~/.ssh/config && chmod 600 ~/.ssh/config
+
+# Sensible defaults for all hosts
+Host *
+    AddKeysToAgent yes
+    UseKeychain yes
+    IdentitiesOnly yes
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+
+# GitHub (HTTPS-style auth over SSH)
+Host github.com
+    HostName github.com
+    User git
+    # IdentityFile ~/.ssh/id_ed25519
+
+# Example named host
+# Host myserver
+#     HostName 203.0.113.10
+#     User jessenia
+#     Port 22
+#     IdentityFile ~/.ssh/id_ed25519

@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run shellcheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          additional_files: install.sh
+          scandir: "."
+          format: gcc
+
+  brewfile:
+    name: Validate Brewfile
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint Brewfile syntax
+        run: |
+          # Fails on malformed Brewfile without installing anything.
+          brew bundle list --file=Brewfile >/dev/null
+
+  luacheck:
+    name: Lua syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Byte-compile Lua configs
+        run: |
+          sudo apt-get update && sudo apt-get install -y lua5.1
+          find config -name '*.lua' -print0 | while IFS= read -r -d '' f; do
+            luac5.1 -p "$f" && echo "ok: $f"
+          done

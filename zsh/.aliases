@@ -1,0 +1,485 @@
+# ============================================================
+
+# Core terminal
+
+# ============================================================
+
+alias c='clear'
+alias h='history'
+alias p='pwd'
+alias reload='exec zsh'
+alias path='echo -e ${PATH//:/\n}'
+alias now='date +"%Y-%m-%d %H:%M:%S"'
+alias week='date +%V'
+alias weather='curl wttr.in'
+
+# Safer defaults
+
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+
+# Fast destructive remove, intentional use only
+
+alias rd='rm -rf --'
+alias rdi='rm -rfi'
+
+# ============================================================
+
+# Files / directories
+
+# ============================================================
+
+alias t='touch'
+alias md='mkdir -p'
+alias ll='ls -lah'
+alias la='ls -A'
+alias l='ls -CF'
+alias lh='ls -lh'
+alias lt='ls -lahtr'
+alias tree1='tree -L 1'
+alias tree2='tree -L 2'
+alias tree3='tree -L 3'
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+alias desk='cd ~/Desktop'
+alias dl='cd ~/Downloads'
+alias docs='cd ~/Documents'
+alias gh='cd ~/github'
+
+mkcd() {
+mkdir -p "$1" && cd "$1"
+}
+
+take() {
+mkdir -p "$1" && cd "$1"
+}
+
+cdf() {
+cd "$(dirname "$1")"
+}
+
+ff() {
+find . -iname "*$1*"
+}
+
+fdc() {
+find . -type d -iname "*$1*"
+}
+
+bigfiles() {
+find . -type f -exec du -h {} + | sort -hr | head -20
+}
+
+recent() {
+find . -type f -maxdepth 2 -print0 | xargs -0 ls -lt | head -20
+}
+
+copyfile() {
+pbcopy < "$1"
+}
+
+copycwd() {
+pwd | pbcopy
+}
+
+# ============================================================
+
+# Editor / shell config
+
+# ============================================================
+
+alias ez="${EDITOR:-vim} ~/.zshrc"
+alias ea="${EDITOR:-vim} ~/.aliases"
+alias el="${EDITOR:-vim} ~/.local.zsh"
+alias eaws="${EDITOR:-vim} ~/.aws_helpers.zsh"
+alias sz='exec zsh'
+alias sa='source ~/.aliases'
+alias szrc='source ~/.zshrc'
+
+# ============================================================
+
+# Claude Code terminal
+
+# ============================================================
+
+alias cla='claude'
+alias clai='claude'
+alias clp='claude -p'
+alias clc='claude -c'
+alias clr='claude -r'
+alias clu='claude update'
+alias cllogin='claude auth login'
+alias cllogout='claude auth logout'
+alias clauth='claude auth status --text'
+alias clagents='claude agents'
+alias cldaemon='claude daemon status'
+alias clhelp='claude --help'
+
+clfile() {
+cat "$1" | claude -p "${2:-Summarize this file}"
+}
+
+clexplain() {
+claude -p "Explain this project structure and identify the main entry points."
+}
+
+clreview() {
+claude -p "Review this repository for bugs, security issues, maintainability problems, and missing tests."
+}
+
+cldiff() {
+git diff | claude -p "Review this diff. Focus on correctness, security, and maintainability."
+}
+
+clstaged() {
+git diff --staged | claude -p "Review this staged diff before commit. Focus on correctness, security, and maintainability."
+}
+
+clcommit() {
+git diff --staged | claude -p "Write a concise conventional commit message for this staged diff."
+}
+
+# ============================================================
+
+# Git
+
+# ============================================================
+
+alias g='git'
+alias ga='git add'
+alias gaa='git add .'
+alias gc='git clone'
+alias gcm='git commit -m'
+alias gca='git commit -v --amend'
+alias gempty="git commit --allow-empty -m 'empty'"
+alias gu='git restore --staged'
+alias gs='git status -sb'
+alias gst='git status'
+alias gb='git branch'
+alias gba='git branch -a'
+alias gbd='git branch -d'
+alias gbD='git branch -D'
+alias gco='git checkout'
+alias gnew='git checkout -b'
+alias gsw='git switch'
+alias gswc='git switch -c'
+alias gf='git fetch'
+alias gfa='git fetch --all --prune'
+alias gr='git remote -v'
+alias grau='git remote add upstream'
+alias grb='git rebase'
+alias grbi='git rebase -i'
+alias gcp='git cherry-pick'
+alias gl='git log --oneline --decorate --graph'
+alias gla='git log --oneline --decorate --graph --all'
+alias gll='git log --stat'
+alias gllp='git log --stat -p'
+alias gd='git diff'
+alias gds='git diff --staged'
+alias gp='git push'
+alias gpf='git push --force-with-lease'
+alias gpl='git pull'
+alias gpr='git pull --rebase'
+alias gpud='git pull upstream develop'
+alias gpudr='git pull upstream develop --rebase'
+
+gmain() {
+git switch main 2>/dev/null || git switch master
+}
+
+groot() {
+local root
+root="$(git rev-parse --show-toplevel 2>/dev/null)" || return 1
+cd "$root"
+}
+
+gcleanbranches() {
+git branch --merged | egrep -v "(^*|main|master|develop)" | xargs -r git branch -d
+}
+
+# ============================================================
+
+# AWS
+
+# Requires ~/.aws_helpers.zsh
+
+# ============================================================
+
+alias awsume='. awsume'
+alias awse='aws-env'
+alias awsp='aws-profile'
+alias awswho='aws-whoami'
+alias awsclear='aws-clear-env'
+alias awsprofiles='aws configure list-profiles'
+alias aws-gci='aws sts get-caller-identity'
+alias awsregion='aws configure get region'
+
+# ============================================================
+
+# Docker
+
+# ============================================================
+
+alias d='docker'
+alias dv='docker version'
+alias di='docker info'
+
+alias dps='docker ps'
+alias dpsa='docker ps -a'
+alias dpsq='docker ps -q'
+alias dpsaq='docker ps -aq'
+
+alias dil='docker image ls'
+alias dirm='docker image rm'
+alias drmi='docker rmi'
+alias dprune='docker system prune'
+alias dprunea='docker system prune -a'
+alias dvol='docker volume ls'
+alias dnet='docker network ls'
+
+alias db='docker build -t'
+alias dex='docker exec -it'
+alias dlog='docker logs -f'
+alias dinsp='docker inspect'
+alias dstats='docker stats'
+alias dstop='docker stop'
+alias drm='docker rm'
+alias drmf='docker rm -f'
+
+dsh() {
+docker exec -it "$1" sh
+}
+
+dbash() {
+docker exec -it "$1" bash
+}
+
+dstopall() {
+docker stop $(docker ps -q)
+}
+
+drmall() {
+docker rm -f $(docker ps -aq)
+}
+
+drmimages() {
+docker rmi -f $(docker images -q)
+}
+
+# Docker Compose v2
+
+alias dc='docker compose'
+alias dcu='docker compose up'
+alias dcud='docker compose up -d'
+alias dcd='docker compose down'
+alias dcr='docker compose restart'
+alias dcl='docker compose logs -f'
+alias dcb='docker compose build'
+alias dcp='docker compose ps'
+alias dce='docker compose exec'
+alias dcrun='docker compose run --rm'
+
+# ============================================================
+
+# Kubernetes
+
+# ============================================================
+
+alias kube='kubectl'
+alias kubectx='kubectl config current-context'
+alias kubectxs='kubectl config get-contexts'
+alias kubeuse='kubectl config use-context'
+alias kubens='kubectl config set-context --current --namespace'
+alias kubenss='kubectl get namespaces'
+alias kubep='kubectl get pods'
+alias kubeap='kubectl get pods -A'
+alias kubes='kubectl get svc'
+alias kubeas='kubectl get svc -A'
+alias kubed='kubectl get deploy'
+alias kubead='kubectl get deploy -A'
+alias kuben='kubectl get nodes'
+alias kubei='kubectl get ingress'
+alias kubeai='kubectl get ingress -A'
+alias kubecm='kubectl get configmap'
+alias kubesec='kubectl get secret'
+alias kubecj='kubectl get cronjob'
+alias kubej='kubectl get job'
+alias kubeall='kubectl get all'
+alias kubealla='kubectl get all -A'
+alias kubedp='kubectl describe pod'
+alias kubedd='kubectl describe deploy'
+alias kubeds='kubectl describe svc'
+alias kubedn='kubectl describe node'
+alias kubedi='kubectl describe ingress'
+alias kubedsec='kubectl describe secret'
+alias kubel='kubectl logs'
+alias kubelf='kubectl logs -f'
+alias kubelprev='kubectl logs --previous'
+alias kubex='kubectl exec -it'
+alias kubeaf='kubectl apply -f'
+alias kubedf='kubectl delete -f'
+alias kubedel='kubectl delete'
+alias kubee='kubectl edit'
+alias kuberr='kubectl rollout restart'
+alias kubers='kubectl rollout status'
+alias kuberh='kubectl rollout history'
+alias kuberu='kubectl rollout undo'
+alias kubepf='kubectl port-forward'
+alias kubetop='kubectl top pod'
+alias kubetopn='kubectl top node'
+alias kubeevents='kubectl get events --sort-by=.lastTimestamp'
+alias kubeeventsa='kubectl get events -A --sort-by=.lastTimestamp'
+alias kubepw='kubectl get pods -o wide'
+alias kubeaw='kubectl get pods -A -o wide'
+alias kubepy='kubectl get pod -o yaml'
+alias kubedy='kubectl get deploy -o yaml'
+alias kubesy='kubectl get svc -o yaml'
+
+kubesh() {
+kubectl exec -it "$1" -- sh
+}
+
+kubebash() {
+kubectl exec -it "$1" -- bash
+}
+
+klogs() {
+kubectl logs -f "$1"
+}
+
+kpodsbyimage() {
+kubectl get pods -A -o jsonpath='{range .items[*]}{.metadata.namespace}{" "}{.metadata.name}{" "}{range .spec.containers[*]}{.image}{" "}{end}{"\n"}{end}'
+}
+
+kubelogs() {
+kubectl logs -f "$1"
+}
+
+kubepodsbyimage() {
+kubectl get pods -A -o jsonpath='{range .items[]}{.metadata.namespace}{" "}{.metadata.name}{" "}{range .spec.containers[]}{.image}{" "}{end}{"\n"}{end}'
+}
+
+kubewatchpods() {
+watch kubectl get pods
+}
+
+kubewatchallpods() {
+watch kubectl get pods -A
+}
+
+kubefindpod() {
+kubectl get pods -A | grep -i "$1"
+}
+
+kubefindsvc() {
+kubectl get svc -A | grep -i "$1"
+}
+
+kubefinddeploy() {
+kubectl get deploy -A | grep -i "$1"
+}
+
+# ============================================================
+
+# Terraform
+
+# ============================================================
+
+alias tf='terraform'
+alias tff='terraform fmt'
+alias tffr='terraform fmt -recursive'
+alias tfv='terraform validate'
+alias tfi='terraform init'
+alias tfig='terraform init -upgrade'
+alias tfp='terraform plan'
+alias tfpo='terraform plan -out=tfplan'
+alias tfa='terraform apply'
+alias tfaa='terraform apply -auto-approve'
+alias tfd='terraform destroy'
+alias tfs='terraform show'
+alias tfsl='terraform state list'
+alias tfo='terraform output'
+alias tfw='terraform workspace show'
+alias tfwl='terraform workspace list'
+alias tfwn='terraform workspace new'
+alias tfws='terraform workspace select'
+
+# ============================================================
+
+# tfenv
+
+# ============================================================
+
+alias tfel='tfenv list'
+alias tfeu='tfenv use'
+alias tfei='tfenv install'
+
+# ============================================================
+
+# Networking / diagnostics
+
+# ============================================================
+
+alias hns='host -t ns'
+alias digshort='dig +short'
+alias myip='curl -s https://ifconfig.me && echo'
+alias headers='curl -I'
+alias ports='lsof -i -P -n'
+alias listening='lsof -i -P -n | grep LISTEN'
+alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
+alias pingg='ping 8.8.8.8'
+alias pingcf='ping 1.1.1.1'
+
+serve() {
+python3 -m http.server "${1:-8000}"
+}
+
+# ============================================================
+
+# macOS
+
+# ============================================================
+
+alias o='open .'
+alias finder='open .'
+alias showhidden='defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder'
+alias hidehidden='defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder'
+alias emptytrash='rm -rf ~/.Trash/*'
+
+# ============================================================
+
+# URLs
+
+# ============================================================
+
+alias @google='open "https://www.google.com"'
+alias @youtube='open "https://www.youtube.com"'
+alias @yt='open "https://www.youtube.com"'
+alias @gmail='open "https://mail.google.com"'
+alias @calendar='open "https://calendar.google.com"'
+alias @drive='open "https://drive.google.com"'
+alias @maps='open "https://maps.google.com"'
+
+alias @weather='open "https://weather.com"'
+alias @radar='open "https://www.weather.gov/radar"'
+alias @nws='open "https://www.weather.gov"'
+alias @aqi='open "https://www.airnow.gov"'
+
+alias @aws='open "https://console.aws.amazon.com"'
+alias @awshealth='open "https://health.aws.amazon.com/health/status"'
+alias @awssso='open "https://aws.amazon.com/single-sign-on/"'
+alias @github='open "https://github.com"'
+alias @gh='open "https://github.com"'
+alias @dockerhub='open "https://hub.docker.com"'
+alias @k8s='open "https://kubernetes.io/docs/home/"'
+alias @tf='open "https://developer.hashicorp.com/terraform/docs"'
+
+alias @down='open "https://downdetector.com/"'
+alias @slackdown='open "https://status.slack.com"'
+alias @openai='open "https://chatgpt.com"'
+alias @claude='open "https://claude.ai"'
+alias @anthropic='open "https://docs.anthropic.com"'

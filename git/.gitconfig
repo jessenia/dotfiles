@@ -1,0 +1,52 @@
+[user]
+	name = Jessenia
+	email = 1072588+jessenia@users.noreply.github.com
+
+[core]
+	editor = nvim
+	pager = delta
+
+[credential]
+	helper = osxkeychain
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = true
+
+[push]
+	autoSetupRemote = true
+	default = current
+
+[fetch]
+	prune = true
+
+[rebase]
+	autoStash = true
+
+[merge]
+	conflictstyle = zdiff3
+
+[diff]
+	colorMoved = default
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	line-numbers = true
+	side-by-side = false
+
+[color]
+	ui = auto
+
+[alias]
+	st = status -sb
+	co = checkout
+	br = branch
+	lg = log --oneline --decorate --graph
+	last = log -1 HEAD --stat
+	undo = reset --soft HEAD~1
+	amend = commit --amend --no-edit

@@ -1,0 +1,28 @@
+# Backups created by install.sh when linking over existing files
+*.backup.*
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Editor / tooling noise
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Neovim plugin lockfile — uncomment to let plugins float instead of pinning
+# config/nvim/lazy-lock.json
+
+# Secrets / machine-local (never commit)
+zsh/.local.zsh
+zsh/.aws_helpers.zsh
+ssh/config
+*.pem
+*.key
+id_rsa*
+id_ed25519*
