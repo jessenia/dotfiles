@@ -145,6 +145,43 @@ git diff --staged | claude -p "Write a concise conventional commit message for t
 
 # ============================================================
 
+# Codex CLI (OpenAI)
+
+# ============================================================
+
+alias cx='codex'
+alias cxe='codex exec'
+alias cxl='codex login'
+alias cxr='codex resume'
+alias cxh='codex --help'
+
+cxfile() {
+codex exec "${2:-Summarize this file}: $(cat "$1")"
+}
+
+cxdiff() {
+git diff | codex exec "Review this diff. Focus on correctness, security, and maintainability."
+}
+
+# ============================================================
+
+# Pieces CLI
+
+# Requires PiecesOS running (cask: pieces-os)
+
+# ============================================================
+
+alias pi='pieces'
+alias pia='pieces ask'
+alias pil='pieces list'
+alias pis='pieces search'
+alias pir='pieces run'
+alias pio='pieces open'
+alias piv='pieces version'
+alias pih='pieces --help'
+
+# ============================================================
+
 # Git
 
 # ============================================================

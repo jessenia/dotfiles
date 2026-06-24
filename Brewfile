@@ -65,6 +65,13 @@ brew "git-delta"    # nicer git diffs
 brew "lazygit"      # git TUI
 
 # ============================================================
+# AI coding tools (terminal)
+# ============================================================
+cask "codex"        # OpenAI Codex CLI coding agent
+brew "pieces-cli"   # Pieces CLI
+cask "pieces-os"    # PiecesOS — local backend the Pieces CLI talks to
+
+# ============================================================
 # Languages & runtimes
 # ============================================================
 brew "go"

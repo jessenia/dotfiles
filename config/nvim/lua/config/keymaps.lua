@@ -62,5 +62,7 @@ keymap("n", "<leader>sx", "<cmd>close<CR>", opts("Close split"))
 keymap("n", "<leader>tt", "<cmd>terminal<CR>", opts("Open terminal"))
 keymap("t", "<Esc>", [[<C-\><C-n>]], opts("Exit terminal mode"))
 
--- Claude terminal
+-- AI coding terminals
 keymap("n", "<leader>tc", "<cmd>terminal claude<CR>", opts("Open Claude terminal"))
+keymap("n", "<leader>tx", "<cmd>terminal codex<CR>", opts("Open Codex terminal"))
+keymap("n", "<leader>tp", "<cmd>terminal pieces run<CR>", opts("Open Pieces terminal"))

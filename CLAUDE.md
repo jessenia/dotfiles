@@ -43,8 +43,12 @@ zsh/
 git/.gitconfig              # Git identity, delta pager, aliases → ~/.gitconfig
 ssh/config.example          # SSH config template (copy to ~/.ssh/config; real one is gitignored)
 macos/defaults.sh           # macOS `defaults write` tweaks (run by install.sh)
-.github/workflows/ci.yml    # CI: shellcheck + Brewfile + Lua syntax
-README.md                   # Project overview + install instructions
+.github/workflows/ci.yml    # CI: shellcheck (bash only) + Brewfile + Lua syntax
+.gitignore                  # Ignores backups, macOS junk, and secrets (see below)
+.editorconfig               # UTF-8 / LF / 2-space defaults
+LICENSE                     # MIT
+README.md                   # Project overview + usage guides (tmux/WezTerm/Neovim)
+CLAUDE.md                   # This file — conventions + guidance
 ```
 
 ### Cross-tool keybinding contract
@@ -57,14 +61,30 @@ README.md                   # Project overview + install instructions
 ### nvim/ internals
 Standard Lazy.nvim layout. `init.lua` requires `config.{options,keymaps,autocmds,lazy}`;
 `lazy.lua` imports everything under `lua/plugins/`. Plugins are grouped one concern per
-file: `colorscheme`, `editor`, `git`, `lsp`, `telescope`, `treesitter`. Leader is `<Space>`.
+file: `colorscheme`, `editor`, `git`, `lsp`, `telescope`, `treesitter`,
+`navigation`. Leader is `<Space>`.
+
+**nvim-treesitter is pinned to `branch = "master"`** in `treesitter.lua`. Do NOT remove
+that pin: the rewritten `main` branch (now the plugin default) drops the
+`require("nvim-treesitter.configs").setup{...}` API this config uses, which breaks
+startup with "module nvim-treesitter.configs not found". Migrating to `main` later is a
+separate rewrite, not a pin removal.
 
 ## Conventions & preferences
 
 - **Browsers:** Chrome and Firefox **only**. Do **not** install Brave.
 - **VPN:** Mozilla VPN + Firefox Relay. Do **not** install Pritunl or Viscosity.
 - **Editors:** VS Code is the primary IDE for development; Neovim is for terminal/CLI
-  text editing and quick edits. `.vimrc` / Vim / Vundle are deprecated and being removed.
+  text editing and quick edits. `.vimrc` / Vim / Vundle are gone — don't reintroduce them.
+- **AI coding CLIs:** Claude Code, Codex (cask `codex`), and Pieces (`pieces-cli` +
+  `pieces-os` backend). Each gets the same treatment: Brewfile entry, an alias group in
+  `zsh/.aliases` (`cl*` / `cx*` / `pi*`), and an nvim terminal keybind
+  (`<leader>tc` Claude, `<leader>tx` Codex, `<leader>tp` Pieces). Add new AI CLIs the
+  same way.
+- **Shared agent instructions:** agents that use `AGENTS.md` (Codex, etc.) should read
+  the same global instructions as Claude. `~/AGENTS.md` is a symlink to
+  `~/.claude/CLAUDE.md` (set up by `scripts/link.sh`). **When adding any new agent, make
+  sure this symlink exists** so all agents share one instruction file.
 - **Terminal:** WezTerm only. iTerm2 is deprecated.
 - **Idempotent bootstrap:** the brew script should be safe to re-run. Prefer
   `brew bundle` / `brew install` (already idempotent) and guard one-off steps so a
@@ -73,7 +93,19 @@ file: `colorscheme`, `editor`, `git`, `lsp`, `telescope`, `treesitter`. Leader i
   setup. Per-project clones, repo checkouts, and `pip install -r` for specific work
   repos do not belong here.
 - **Package changes go in `Brewfile`, not the script.** The bootstrap just runs
-  `brew bundle`. To add/remove an app, edit `Brewfile`.
+  `brew bundle`. To add/remove an app, edit `Brewfile` (then `make brew`).
+- **Use the Makefile for common tasks:** `make brew` (install packages),
+  `make symlinks` (re-link), `make macos` (defaults), `make dump` (regen Brewfile from
+  what's installed), `make lint` (shellcheck). `make install` runs the full bootstrap.
+- **Shell scripting:** new scripts are **bash** — start with `#!/usr/bin/env bash` and
+  `set -euo pipefail`, keep them idempotent. ShellCheck (CI + `make lint`) lints **only
+  bash** scripts; `zsh/` is excluded because ShellCheck can't parse zsh. Don't try to
+  "fix" zsh syntax to satisfy ShellCheck. Suppress intentional false positives with a
+  scoped `# shellcheck disable=SCxxxx` + a comment explaining why.
+- **Secrets never get committed.** Machine-local/secret config lives in `~/.local.zsh`
+  and `~/.aws_helpers.zsh` (sourced by `.zshrc` if present) and the real `~/.ssh/config`
+  — all gitignored. The repo only tracks `ssh/config.example`. Don't put tokens, keys,
+  or work-specific identities in tracked files.
 - **Comment style:** section headers as banner comments (`# ===…===`) matching the
   existing `.aliases` / `.zshrc` style.
 
@@ -100,13 +132,20 @@ agreement when editing either.
 
 When asked to update this repo, keep these in mind:
 
-1. Keep `README.md` in sync with the actual files and install steps.
-2. Keep `brew-install-script.sh` current: remove deprecated apps, add new tools.
-3. Build out `wezterm/` and `tmux/` configs to match the nvim setup (rose-pine theme,
-   `<C-h/j/k/l>` navigation already used in nvim — keep keybindings coherent across
-   tmux + nvim + wezterm).
+1. Keep `README.md` in sync with the actual files, install steps, and keybindings.
+   The README has per-tool usage guides (tmux / WezTerm / Neovim) — update the relevant
+   guide whenever a keybinding or config changes.
+2. Keep `Brewfile` current: remove deprecated apps, add new tools. Never list packages
+   directly in `install.sh`.
+3. Keep keybindings **coherent across tmux + nvim + WezTerm** (the `Ctrl-h/j/k/l`
+   navigation contract above). If you change one tool's nav/split keys, check the others.
 4. **Whenever the user adds a new tool, alias, app, or workflow, record it here** so this
    file stays the source of truth for the setup.
+
+## Known follow-ups / cleanup
+
+- tmux is in the `Brewfile` but not yet installed on the user's current machine
+  (`brew install tmux` / `make brew`). Until then, WezTerm's own panes are the fallback.
 
 ## Deprecated — do not reintroduce
 

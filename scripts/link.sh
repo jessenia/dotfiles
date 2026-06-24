@@ -31,4 +31,10 @@ link "$DOTFILES_DIR/config/nvim"            "$HOME/.config/nvim"
 link "$DOTFILES_DIR/config/wezterm"         "$HOME/.config/wezterm"
 link "$DOTFILES_DIR/config/tmux/.tmux.conf" "$HOME/.tmux.conf"
 
+# Cross-agent instructions: Codex (and other agents) read AGENTS.md. Point it at
+# Claude's global ~/.claude/CLAUDE.md so every agent shares one set of instructions.
+mkdir -p "$HOME/.claude"
+[[ -e "$HOME/.claude/CLAUDE.md" ]] || touch "$HOME/.claude/CLAUDE.md"
+link "$HOME/.claude/CLAUDE.md"              "$HOME/AGENTS.md"
+
 echo "==> Symlinks done"

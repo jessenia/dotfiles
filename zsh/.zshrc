@@ -35,7 +35,6 @@ plugins=(
   ansible
   aws
   brew
-  iterm2
   vscode
   common-aliases
   zsh-autosuggestions
@@ -43,6 +42,14 @@ plugins=(
 )
 
 source "$ZSH/oh-my-zsh.sh"
+
+# ============================================================
+# Key bindings
+# Force emacs-style line editing. zsh otherwise auto-selects *vi* mode
+# because $EDITOR ("nvim") contains "vi", which makes typed letters behave
+# as vi motions after Esc. Use `bindkey -v` here if you actually want vi mode.
+# ============================================================
+bindkey -e
 
 # ============================================================
 # Completion

@@ -3,6 +3,9 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    -- Pin to the master branch: the rewritten `main` branch removed the
+    -- `nvim-treesitter.configs` module and the classic `.setup()` API used below.
+    branch = "master",
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup({
