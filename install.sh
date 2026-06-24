@@ -45,6 +45,8 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 # Pick the right brew prefix for the architecture.
+# The single quotes are intentional: we store the literal line to append to .zprofile.
+# shellcheck disable=SC2016
 if [[ -x /opt/homebrew/bin/brew ]]; then
   BREW_SHELLENV='eval "$(/opt/homebrew/bin/brew shellenv)"'
 else

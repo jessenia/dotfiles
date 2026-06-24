@@ -14,9 +14,13 @@ jobs:
       - name: Run shellcheck
         uses: ludeeus/action-shellcheck@master
         with:
-          additional_files: install.sh
+          # zsh/ holds zsh files (.zshrc, .zprofile, .p10k.zsh) which ShellCheck
+          # cannot parse (it only supports sh/bash). Lint just the POSIX/bash scripts.
           scandir: "."
+          ignore_paths: zsh
           format: gcc
+        env:
+          SHELLCHECK_OPTS: --shell=bash
 
   brewfile:
     name: Validate Brewfile
