@@ -8,7 +8,7 @@ Jessenia's personal macOS dotfiles. The goal is a **reproducible, fresh-out-of-t
 Mac setup**: clone this repo, run the bootstrap script, symlink the configs, and have a
 working environment.
 
-Primary user: Jessenia (`1072588+jessenia@users.noreply.github.com`). Repo lives at `~/github/dotfiles`.
+Primary user: Jessenia. Repo lives at `~/github/dotfiles`.
 
 ## Target stack
 

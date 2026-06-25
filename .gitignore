@@ -21,6 +21,7 @@ Icon?
 # Secrets / machine-local (never commit)
 zsh/.local.zsh
 zsh/.aws_helpers.zsh
+.gitconfig.local
 ssh/config
 *.pem
 *.key

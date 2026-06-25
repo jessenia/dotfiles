@@ -1,0 +1,11 @@
+# Machine-local git identity. Kept out of version control so a public dotfiles
+# repo never carries your real email.
+#
+#   cp git/.gitconfig.local.example ~/.gitconfig.local
+#   # then edit ~/.gitconfig.local with your name + email
+#
+# This file is pulled in via the [include] directive in git/.gitconfig.
+
+[user]
+	name = Your Name
+	email = you@example.com

@@ -1,6 +1,7 @@
-[user]
-	name = Jessenia
-	email = 1072588+jessenia@users.noreply.github.com
+# Identity is kept out of this public repo. Copy git/.gitconfig.local.example to
+# ~/.gitconfig.local (gitignored) and put your name/email there.
+[include]
+	path = ~/.gitconfig.local
 
 [core]
 	editor = nvim
